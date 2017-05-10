@@ -1,0 +1,40 @@
+#!/bin/bash
+# example mkcloud deployment tool for cloudtraining
+
+function date_marker
+{
+  echo "============================================================="
+  date
+  echo "============================================================="
+}
+
+cloudno=${1:-1}
+shift
+
+a=/root/github.com/SUSE-Cloud/automation
+sparsefile=cloud-lvm.sparse
+lodev=`losetup -a | grep $(realpath $sparsefile) | cut -d: -f1`
+: ${lodev:=$(losetup -f --show $sparsefile)}
+echo "FYI: lodev=$lodev"
+
+# host specific mkcloud config
+export cloudpv=$lodev
+export log_dir=./mkcloud.logs
+
+# source the custom config for $cloudno
+[ -e cloud.$cloudno ] && . cloud.$1
+
+# run deployment
+date_marker
+
+# sourcing the network config for $cloudno (this will set $cloud)
+. $a/scripts/mkcloudhost/runtestmulticloud $cloudno
+
+# creating a rundir for this cloud
+rundir=mkcloudruns/$cloud
+mkdir -p $rundir
+pushd $rundir
+$a/scripts/mkcloud $@
+popd
+
+date_marker
