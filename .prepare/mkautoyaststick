@@ -1,0 +1,27 @@
+#!/bin/sh -x
+: ${outdisk:=sdX}
+m=/mnt/1
+mkdir -p $m
+loader=/mounts/dist/install/SLP/openSUSE-Leap-42.2-GM/x86_64/DVD1/boot/x86_64/loader
+size=$(cat /sys/class/block/$outdisk/size)
+if [[ $size -gt 70000000 ]] ; then
+    echo "$outdisk is $size blocks (of 512 Byte) - not a USB stick?"
+fi
+
+mkfs.vfat -I -F 32 /dev/$outdisk
+mount /dev/$outdisk $m
+rsync -a $loader/{initrd,linux} $m/
+syslinux --install /dev/$outdisk
+cat > $m/syslinux.cfg <<EOF
+PROMPT 1
+TIMEOUT 20
+DEFAULT linuxx
+
+LABEL linuxx
+ LINUX linux
+ INITRD initrd
+ APPEND autoyast=https://raw.githubusercontent.com/jdsn/cloudtraining/master/.prepare/autoyast-training-gnome.xml brokenmodule=nouveau install=http://download.opensuse.org/distribution/leap/42.2/repo/oss/
+EOF
+cat $m/syslinux.cfg
+ls -l $m
+umount $m
