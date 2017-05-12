@@ -1,3 +1,4 @@
 mkcloudruns
 *.log
 *.sparse
+cloud.[0-9]*
