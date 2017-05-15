@@ -1,0 +1,16 @@
+# on admin node:
+wget --no-check-certificate https://w3.suse.de/~bwiedemann/cloud/ldap.yaml
+crowbar batch build ldap.yaml
+
+# on controller node
+# import SUSE CA
+susedownload=download.suse.de
+wget -O- http://$susedownload/ibs/SUSE:/CA/SLE_12/repodata/repomd.xml.key | gpg --import
+gpg --export -a 0xFEAB502539D846DB2C0961CA70AF9E8139DB7C82 > build.suse.de.key.pgp
+rpm --import build.suse.de.key.pgp
+zypper ar http://$susedownload/ibs/SUSE:/CA/SLE_12/ suseca
+zypper -n in ca-certificates-suse
+
+# create project + give ldap users permissions to it
+openstack --insecure project create suse
+openstack --insecure role add --group suse --group-domain ldap_users --project suse Member
