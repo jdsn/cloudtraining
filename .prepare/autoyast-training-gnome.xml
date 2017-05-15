@@ -22,6 +22,14 @@
         <!-- See bnc#787157 for discussion on ask_on_error -->
         <ask_on_error config:type="boolean">false</ask_on_error>
       </listentry>
+      <listentry>
+        <name>suse_ca</name>
+        <product>suse_ca</product>
+        <product_dir>/</product_dir>
+        <media_url>http://download.suse.de/ibs/SUSE:/CA/openSUSE_Leap_42.2/</media_url>
+        <!-- See bnc#787157 for discussion on ask_on_error -->
+        <ask_on_error config:type="boolean">false</ask_on_error>
+      </listentry>
     </add_on_products>
   </add-on>
   <scripts>
@@ -52,7 +60,8 @@
       <accept_unknown_gpg_key config:type="boolean">true</accept_unknown_gpg_key>
       <accept_unsigned_file config:type="boolean">false</accept_unsigned_file>
       <accept_verification_failed config:type="boolean">false</accept_verification_failed>
-      <import_gpg_key config:type="boolean">true</import_gpg_key></signature-handling>
+      <import_gpg_key config:type="boolean">true</import_gpg_key>
+    </signature-handling>
     <storage/>
   </general>
   <groups config:type="list">
@@ -190,6 +199,7 @@
       <package>wget</package>
       <package>git-core</package>
       <package>chromium</package>
+      <package>ca-certificates-suse</package>
     </packages>
     <patterns config:type="list">
       <pattern>base</pattern>
