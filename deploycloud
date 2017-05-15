@@ -22,7 +22,7 @@ export cloudpv=$lodev
 export log_dir=./mkcloud.logs
 
 # source the custom config for $cloudno
-[ -e cloud.$cloudno ] && . cloud.$1
+[ -e cloud.$cloudno ] && . cloud.$cloudno
 
 # run deployment
 date_marker
