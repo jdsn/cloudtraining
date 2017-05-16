@@ -12,6 +12,7 @@ cloudno=${1:-1}
 shift
 
 a=/root/github.com/SUSE-Cloud/automation
+(cd $a && git pull)
 sparsefile=cloud-lvm.sparse
 lodev=`losetup -a | grep $(realpath $sparsefile) | cut -d: -f1`
 : ${lodev:=$(losetup -f --show $sparsefile)}
